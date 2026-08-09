@@ -40,7 +40,7 @@ export const skillCategories: SkillCategory[] = [
     label: 'Cloud / DevOps',
     icon: '☁',
     color: '#8a2be2',
-    skills: ['AWS (EC2, S3)', 'Docker', 'Jenkins', 'CI/CD', 'Prometheus', 'Grafana'],
+    skills: ['AWS (EC2, S3)', 'Docker', 'Jenkins', 'CI/CD', 'Prometheus', 'Grafana', 'Terraform'],
   },
   {
     label: 'AI / Automation',

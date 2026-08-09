@@ -221,10 +221,10 @@ export default function Hero() {
 
           {/* HUD Cards Grid */}
           <div className="grid grid-cols-2 gap-3">
-            <HUDCard value="60 FPS" label="Physics Engine" icon="🎮" color="cyan"   delay={0.6} />
-            <HUDCard value="-35%"   label="API Latency"   icon="⚡" color="emerald" delay={0.7} />
-            <HUDCard value="+25%"   label="Reliability"   icon="🛡" color="purple"  delay={0.8} />
-            <HUDCard value="AWS ✓"  label="Certified"     icon="☁" color="cyan"    delay={0.9} />
+            <HUDCard value="60 FPS"  label="Physics Engine" icon="🎮" color="cyan"   delay={0.6} />
+            <HUDCard value="B.Tech"  label="CSE ('27)"     icon="🎓" color="purple" delay={0.7} />
+            <HUDCard value="Full-Stack" label="Systems & AI" icon="⚙" color="emerald" delay={0.8} />
+            <HUDCard value="AWS ✓"   label="Certified"     icon="☁" color="cyan"    delay={0.9} />
           </div>
         </motion.div>
       </div>
