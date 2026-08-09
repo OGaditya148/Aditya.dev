@@ -59,12 +59,12 @@ export default function AIPlayground() {
     }
   }, [messages, isTyping]);
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = input.trim();
-    if (!trimmed || isTyping) return;
+  const handleSendMessage = (customText?: string, e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const query = (customText ?? input).trim();
+    if (!query || isTyping) return;
 
-    const userMsg: Message = { id: idRef.current++, role: 'user', content: trimmed };
+    const userMsg: Message = { id: idRef.current++, role: 'user', content: query };
     setMessages((prev) => [...prev, userMsg]);
     setInput('');
     setIsTyping(true);
@@ -73,7 +73,7 @@ export default function AIPlayground() {
       const reply: Message = {
         id: idRef.current++,
         role: 'assistant',
-        content: getResponse(trimmed),
+        content: getResponse(query),
       };
       setMessages((prev) => [...prev, reply]);
       setIsTyping(false);
@@ -217,7 +217,7 @@ export default function AIPlayground() {
             {quickPrompts.map((p) => (
               <button
                 key={p}
-                onClick={() => setInput(p)}
+                onClick={() => handleSendMessage(p)}
                 className="text-[10px] font-jetbrains px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.06] text-slate-400 hover:text-[#00ff88] hover:border-[#00ff88]/30 transition-all duration-150"
               >
                 {p}
@@ -227,7 +227,7 @@ export default function AIPlayground() {
 
           {/* Input form */}
           <form
-            onSubmit={submit}
+            onSubmit={(e) => handleSendMessage(undefined, e)}
             className="flex items-center gap-3 px-4 py-3 border-t border-white/[0.06] bg-white/[0.02]"
           >
             <span className="font-jetbrains text-[#8a2be2] text-sm shrink-0">{'>'}</span>
