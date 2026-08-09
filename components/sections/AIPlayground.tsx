@@ -23,7 +23,7 @@ const getResponse = (input: string): string => {
   if (q.includes('experience') || q.includes('soilherb') || q.includes('intern'))
     return '> ACTIVE MISSION: Soilherb (SDE Intern)\n\nStatus: ONLINE since June 2026\nReliability boost: +25%\nAPI latency reduction: -35% (MongoDB indexing)\nAutomated: 40 hrs/mo via AI pipelines\nCI/CD: ZERO bugs deployed\n\n[CURRENT IMPACT: CRITICAL]';
   if (q.includes('contact') || q.includes('hire') || q.includes('reach'))
-    return '> CONTACT CHANNELS\n\nEmail: agarwaladitya9634@gmail.com\nGitHub: github.com/OGaditya148\nLinkedIn: linkedin.com/in/aditya-agarwal\nLocation: Agra, India\n\n[STATUS: OPEN TO OPPORTUNITIES]';
+    return '> CONTACT CHANNELS\n\nEmail: agarwaladitya9634@gmail.com\nGitHub: github.com/OGaditya148\nLinkedIn: https://www.linkedin.com/in/aditya-agarwal-34868b335\nLocation: Agra, India\n\n[STATUS: OPEN TO OPPORTUNITIES]';
   if (q.includes('education') || q.includes('degree') || q.includes('cert'))
     return '> CREDENTIALS VERIFIED\n\nDegree: B.Tech CSE (Expected 2027)\nCertifications:\n  ☁ AWS Cloud Practitioner\n  🤖 Google AI Essentials\n  ⚛ Advanced React Developer\n  📊 Data Analyst Certificate\n\n[CLEARANCE: GRANTED]';
   if (q.includes('hello') || q.includes('hi') || q.includes('hey'))

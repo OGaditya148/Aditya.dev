@@ -5,7 +5,7 @@ export const personalInfo = {
   name: 'Aditya Agarwal',
   location: 'Agra, India',
   github: 'https://github.com/OGaditya148',
-  linkedin: 'https://linkedin.com/in/aditya-agarwal',
+  linkedin: 'https://www.linkedin.com/in/aditya-agarwal-34868b335',
   email: 'agarwaladitya9634@gmail.com',
   title: 'Full-Stack Engineer',
   tagline: 'Building at the intersection of systems, AI & the web.',
