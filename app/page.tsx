@@ -1,4 +1,7 @@
 // app/page.tsx
+'use client';
+
+import { useEffect } from 'react';
 import Navbar from '@/components/ui/Navbar';
 import Hero from '@/components/sections/Hero';
 import SkillUniverse from '@/components/sections/SkillUniverse';
@@ -15,6 +18,10 @@ import Contact from '@/components/sections/Contact';
  * during Next.js server rendering.
  */
 export default function Home() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <Navbar />
