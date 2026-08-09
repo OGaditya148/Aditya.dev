@@ -42,7 +42,7 @@ export default function AIPlayground() {
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const idRef = useRef(1);
   const isFirstRender = useRef(true);
 
@@ -51,7 +51,12 @@ export default function AIPlayground() {
       isFirstRender.current = false;
       return;
     }
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
   }, [messages, isTyping]);
 
   const submit = (e: React.FormEvent) => {
@@ -153,7 +158,7 @@ export default function AIPlayground() {
           </div>
 
           {/* Messages */}
-          <div className="h-72 sm:h-80 overflow-y-auto p-4 space-y-4 font-jetbrains text-xs sm:text-sm">
+          <div ref={chatContainerRef} className="h-72 sm:h-80 overflow-y-auto p-4 space-y-4 font-jetbrains text-xs sm:text-sm">
             <AnimatePresence initial={false}>
               {messages.map((msg) => (
                 <motion.div
@@ -205,7 +210,6 @@ export default function AIPlayground() {
                 <span className="text-xs">Processing query...</span>
               </motion.div>
             )}
-            <div ref={messagesEndRef} />
           </div>
 
           {/* Quick prompts */}
