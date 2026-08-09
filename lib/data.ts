@@ -92,6 +92,14 @@ export const projects: Project[] = [
     highlight: 'Automated timesheet generation; reduced query time by 40% with RBAC.',
     tag: 'Full-Stack',
   },
+  {
+    id: 'support-copilot',
+    name: 'SupportCopilot',
+    stack: ['Next.js', 'Supabase', 'Prisma', 'pgvector', 'Anthropic API'],
+    highlight: 'RAG-based AI support ticket assistant with semantic search over past tickets.',
+    tag: 'AI',
+    github: 'https://github.com/OGaditya148/SupportCopilot',
+  },
 ];
 
 export const experience: Experience[] = [

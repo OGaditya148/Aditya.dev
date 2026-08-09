@@ -6,6 +6,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { ExternalLink, Github, Zap } from 'lucide-react';
 import type { Project } from '@/types';
 import { cn } from '@/lib/utils';
+import { projects } from '@/lib/data';
 
 const tagStyles: Record<Project['tag'], string> = {
   AI:           'tag-ai border',
@@ -144,7 +145,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
           )}
           <span className="flex items-center gap-1 text-xs font-jetbrains text-slate-500 ml-auto">
             <Zap size={11} style={{ color: accentColor }} />
-            {index + 1}/{5}
+            {index + 1}/{projects.length}
           </span>
         </div>
       </div>
