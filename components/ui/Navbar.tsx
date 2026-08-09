@@ -31,8 +31,6 @@ export default function Navbar() {
     }
     
     // If mobile menu is open, close it after a short delay.
-    // Closing it immediately triggers re-renders and layout shifts that can interrupt
-    // the browser's smooth scrolling behavior.
     if (mobileOpen) {
       setTimeout(() => {
         setMobileOpen(false);
@@ -112,9 +110,10 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
             className="absolute top-full left-0 right-0 md:hidden glass-strong border-t border-white/[0.06]"
           >
             <ul className="px-4 py-4 flex flex-col gap-1">
