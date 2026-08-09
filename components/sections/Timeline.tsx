@@ -17,7 +17,7 @@ export default function Timeline() {
 
   return (
     <SectionWrapper id="timeline" label="experience" className="bg-[#050508]">
-      <div ref={containerRef} className="max-w-5xl mx-auto px-4 sm:px-6">
+      <div ref={containerRef} className="relative max-w-5xl mx-auto px-4 sm:px-6">
         {/* Heading */}
         <div className="text-center mb-16">
           <motion.h2

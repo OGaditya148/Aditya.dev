@@ -33,7 +33,7 @@ body {
   background-color: var(--bg);
   color: #e2e8f0;
   font-family: 'Inter', system-ui, sans-serif;
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
