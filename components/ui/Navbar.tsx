@@ -23,8 +23,21 @@ export default function Navbar() {
 
   const handleNav = (href: string) => {
     setActive(href);
-    setMobileOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    
+    // Find target element and scroll to it
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // If mobile menu is open, close it after a short delay.
+    // Closing it immediately triggers re-renders and layout shifts that can interrupt
+    // the browser's smooth scrolling behavior.
+    if (mobileOpen) {
+      setTimeout(() => {
+        setMobileOpen(false);
+      }, 150);
+    }
   };
 
   return (
