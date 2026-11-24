@@ -13,33 +13,18 @@ interface Message {
   id: number;
 }
 
-/* Simulated responses about Aditya */
-const getResponse = (input: string): string => {
-  const q = input.toLowerCase();
-  if (q.includes('skill') || q.includes('tech') || q.includes('stack'))
-    return '> SKILL MATRIX LOADED\n\nCore: TypeScript · React · Next.js · Node.js · Python\nCloud: AWS (EC2, S3) · Docker · Jenkins\nAI: OpenAI API · Agentic AI · Make.com · Vapi\nDB: MongoDB · PostgreSQL · Redis\n\n[PROFICIENCY: EXPERT-TIER]';
-  if (q.includes('project') || q.includes('built') || q.includes('work'))
-    return '> PROJECT INDEX\n\n[1] Sim Engine — C++/OpenGL, 60FPS physics\n[2] ImaGen — AI image queue, OpenAI API\n[3] Food Delivery — Microservices, <120ms latency\n[4] Taskify — React, persistent state\n[5] Employee Portal — RBAC, -40% query time\n\nAll shipped. Zero compromises.';
-  if (q.includes('experience') || q.includes('soilherb') || q.includes('intern'))
-    return '> ACTIVE MISSION: Soilherb (SDE Intern)\n\nStatus: ONLINE since June 2026\nReliability boost: +25%\nAPI latency reduction: -35% (MongoDB indexing)\nAutomated: 40 hrs/mo via AI pipelines\nCI/CD: ZERO bugs deployed\n\n[CURRENT IMPACT: CRITICAL]';
-  if (q.includes('contact') || q.includes('hire') || q.includes('reach'))
-    return '> CONTACT CHANNELS\n\nEmail: agarwaladitya9634@gmail.com\nGitHub: github.com/OGaditya148\nLinkedIn: https://www.linkedin.com/in/aditya-agarwal-34868b335\nLocation: Agra, India\n\n[STATUS: OPEN TO OPPORTUNITIES]';
-  if (q.includes('education') || q.includes('degree') || q.includes('cert'))
-    return '> CREDENTIALS VERIFIED\n\nDegree: B.Tech CSE (Expected 2027)\nCertifications:\n  ☁ AWS Cloud Practitioner\n  🤖 Google AI Essentials\n  ⚛ Advanced React Developer\n  📊 Data Analyst Certificate\n\n[CLEARANCE: GRANTED]';
-  if (q.includes('hello') || q.includes('hi') || q.includes('hey'))
-    return '> SYSTEM ONLINE\n\nHello, operator. I am Aditya\'s AI terminal.\nI can brief you on skills, projects, experience, or contact info.\n\nType your query. I will respond.';
-  return '> QUERY PROCESSING...\n\nI can brief you on:\n  - skills / tech stack\n  - projects built\n  - experience (Soilherb)\n  - education & certs\n  - contact / hire\n\nRefine your query, operator.';
+const API_URL =
+  process.env.NEXT_PUBLIC_ASSISTANT_API_URL || 'http://127.0.0.1:8000';
+
+const INITIAL_MESSAGE: Message = {
+  id: 0,
+  role: 'assistant',
+  content:
+    '> ADITYA.AI TERMINAL v2.0\n\nConnected to Aditya\'s personal assistant. Ask me anything about:\n  • Skills & Tech Stack\n  • Projects Built\n  • Education & Scores\n  • Internship Experience\n  • Contact & Availability\n\n[READY FOR INPUT]',
 };
 
 export default function AIPlayground() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 0,
-      role: 'assistant',
-      content:
-        '> ADITYA.AI TERMINAL v1.0\n\nOperational. Ask me about:\n  • Skills & Tech Stack\n  • Projects Built\n  • Work Experience\n  • Education & Certs\n  • How to Hire Aditya\n\n[READY FOR INPUT]',
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -59,25 +44,65 @@ export default function AIPlayground() {
     }
   }, [messages, isTyping]);
 
-  const handleSendMessage = (customText?: string, e?: React.FormEvent) => {
+  const handleSendMessage = async (customText?: string, e?: React.FormEvent) => {
     if (e) e.preventDefault();
     const query = (customText ?? input).trim();
     if (!query || isTyping) return;
 
-    const userMsg: Message = { id: idRef.current++, role: 'user', content: query };
+    const userMsg: Message = {
+      id: idRef.current++,
+      role: 'user',
+      content: query,
+    };
+
+    // Pass prior conversation turns (excluding the initial/reset system banner)
+    const history = messages
+      .filter((m) => m.id !== 0)
+      .map((m) => ({ role: m.role, content: m.content }));
+
     setMessages((prev) => [...prev, userMsg]);
     setInput('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      const reply: Message = {
-        id: idRef.current++,
-        role: 'assistant',
-        content: getResponse(query),
-      };
-      setMessages((prev) => [...prev, reply]);
+    try {
+      const res = await fetch(`${API_URL}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: query,
+          history,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server responded with ${res.status}`);
+      }
+
+      const data = await res.json();
+      const assistantText =
+        data.reply || data['Reply: '] || 'No response received from assistant.';
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: idRef.current++,
+          role: 'assistant',
+          content: assistantText,
+        },
+      ]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: idRef.current++,
+          role: 'assistant',
+          content:
+            '> CONNECTION ERROR\n\nCould not reach Aditya\'s AI server right now. Make sure the FastAPI backend is running or try again shortly.',
+        },
+      ]);
+    } finally {
       setIsTyping(false);
-    }, 700 + Math.random() * 400);
+    }
   };
 
   const reset = () => {
@@ -94,8 +119,8 @@ export default function AIPlayground() {
   const quickPrompts = [
     'What are your skills?',
     'Tell me about your projects',
-    'What is your experience?',
-    'How can I hire you?',
+    'What is your educational background?',
+    'Tell me about your internship experience',
   ];
 
   return (
@@ -158,7 +183,10 @@ export default function AIPlayground() {
           </div>
 
           {/* Messages */}
-          <div ref={chatContainerRef} className="h-72 sm:h-80 overflow-y-auto p-4 space-y-4 font-jetbrains text-xs sm:text-sm">
+          <div
+            ref={chatContainerRef}
+            className="h-72 sm:h-80 overflow-y-auto p-4 space-y-4 font-jetbrains text-xs sm:text-sm"
+          >
             <AnimatePresence initial={false}>
               {messages.map((msg) => (
                 <motion.div
@@ -218,7 +246,8 @@ export default function AIPlayground() {
               <button
                 key={p}
                 onClick={() => handleSendMessage(p)}
-                className="text-[10px] font-jetbrains px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.06] text-slate-400 hover:text-[#00ff88] hover:border-[#00ff88]/30 transition-all duration-150"
+                disabled={isTyping}
+                className="text-[10px] font-jetbrains px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.06] text-slate-400 hover:text-[#00ff88] hover:border-[#00ff88]/30 disabled:opacity-40 transition-all duration-150"
               >
                 {p}
               </button>
